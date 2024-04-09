@@ -16,14 +16,17 @@ class BrowserManager(production: Boolean, debug: Boolean) {
         if (!debug) {
             options.addArguments("--headless")
             options.addArguments("--disable-logging")
+        } else {
+            Log.alert("Running in debug mode...")
         }
-        browser = if (production) {
-            RemoteWebDriver(
+        if (production) {
+            browser = RemoteWebDriver(
                 URI.create("http://selenium:4444/wd/hub").toURL(),
                 options
             )
         } else {
-            ChromeDriver(options)
+            browser = ChromeDriver(options)
+            Log.alert("Running in local mode...")
         }
         browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
     }

@@ -23,7 +23,7 @@ object Log {
     }
 
     fun error(message: String) {
-        println("[${colour("E", 31)}] ${colour(message, 31)}")
+        println("[${colour("E", 31)}]\n${colour(message, 31)}")
     }
 
     fun trace(errorTraceback: Throwable) {
