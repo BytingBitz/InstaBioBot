@@ -8,11 +8,12 @@ import java.net.URI
 import java.time.Duration
 
 class BrowserManager(production: Boolean, debug: Boolean) {
+
     val browser: WebDriver
 
     init {
         val options = ChromeOptions()
-        Log.info("Starting Selenium: production $production, debug $debug")
+        Log.info("Starting Selenium: production [$production], debug [$debug]")
         if (!debug) {
             options.addArguments("--headless")
             options.addArguments("--disable-logging")
