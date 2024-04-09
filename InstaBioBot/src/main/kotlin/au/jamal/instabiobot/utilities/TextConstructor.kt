@@ -16,8 +16,8 @@ object TextConstructor {
         val hourFormatter = DateTimeFormatter.ofPattern("h a")
         val hour = currentDateTime.format(hourFormatter).lowercase(Locale.getDefault())
             .replaceFirst("^0".toRegex(), "")
-        val dayOfWeek = currentDateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
-        return "It is $hour on a $dayOfWeek..."
+        val day = currentDateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+        return "It is $hour on a $day..."
     }
 
 }
