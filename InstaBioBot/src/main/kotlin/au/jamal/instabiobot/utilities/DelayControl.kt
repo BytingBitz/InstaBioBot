@@ -1,4 +1,4 @@
-package au.jamal.instabiobot
+package au.jamal.instabiobot.utilities
 
 import kotlin.random.Random
 
@@ -11,4 +11,5 @@ object DelayControl {
         val durationMillis = durationSeconds * 1000L
         Thread.sleep(durationMillis)
     }
+
 }

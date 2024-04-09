@@ -1,6 +1,9 @@
-package au.jamal.instabiobot
+package au.jamal.instabiobot.instagram
 
+import au.jamal.instabiobot.utilities.DelayControl
+import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.By
+import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
@@ -14,7 +17,8 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     private val session: BrowserManager = BrowserManager(production, debug)
     private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(10))
 
-    fun login(username: String, password: String) {
+    fun login() {
+        val (username, password) = LoginSecrets.envLoad()
         session.browser.get(INSTAGRAM_URL)
         DelayControl.sleep(5, 10)
         val usernameInput = sessionWait.until(
@@ -30,22 +34,27 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         )
         loginButton.click()
         DelayControl.sleep(5, 10)
-        // Verify login
-        Log.status("Login successful at ${LocalDateTime.now()}")
+        try { // non-stale DOM reference indicates login failed.
+            sessionWait.until(ExpectedConditions.stalenessOf(loginButton))
+            Log.status("Login successful at ${LocalDateTime.now()}")
+        } catch (e: TimeoutException) {
+            Log.alert("Login failed at ${LocalDateTime.now()}")
+            throw IllegalStateException("Verify login details...")
+        }
     }
 
     fun getCurrentBio (): String {
-        navigateInstagramSettings()
+        verifySettingsPage()
         val bioElement = sessionWait.until(
             ExpectedConditions.presenceOfElementLocated(By.cssSelector("textarea[id='pepBio']"))
         )
         val bioText = bioElement.getAttribute("value")
-        Log.status("Current bio text: $bioText at ${LocalDateTime.now()}")
+        Log.status("Current bio text: [$bioText] at ${LocalDateTime.now()}")
         return bioText
     }
 
     fun updateBio (newBioText: String) {
-        navigateInstagramSettings()
+        verifySettingsPage()
         val bioElement = sessionWait.until(
             ExpectedConditions.presenceOfElementLocated(By.cssSelector("textarea[id='pepBio']"))
         )
@@ -56,7 +65,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         )
         updateButton.click()
         // Verify bio update
-        Log.status("Updated bio text: $newBioText at ${LocalDateTime.now()}")
+        Log.status("Updated bio text: [$newBioText] at ${LocalDateTime.now()}")
     }
 
     fun end() {
@@ -64,13 +73,15 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         session.end()
     }
 
-    private fun navigateInstagramSettings() {
+    private fun verifySettingsPage() {
         if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
             session.browser.get(INSTAGRAM_SETTINGS_URL)
             DelayControl.sleep(2, 5)
             if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
-                throw IllegalStateException("Failed to access settings...")
+                Log.alert("Failed to access Instagram settings")
+                throw IllegalStateException("Verify session login...")
             }
         }
     }
+
 }

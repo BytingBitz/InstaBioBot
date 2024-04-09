@@ -1,5 +1,6 @@
-package au.jamal.instabiobot
+package au.jamal.instabiobot.instagram
 
+import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
@@ -7,7 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URI
 import java.time.Duration
 
-class BrowserManager(production: Boolean, debug: Boolean) {
+class BrowserManager (production: Boolean, debug: Boolean) {
 
     val browser: WebDriver
 
@@ -35,4 +36,5 @@ class BrowserManager(production: Boolean, debug: Boolean) {
     fun end() {
         browser.quit()
     }
+
 }

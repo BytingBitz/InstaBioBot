@@ -1,4 +1,4 @@
-package au.jamal.instabiobot
+package au.jamal.instabiobot.utilities
 
 object Log {
 
@@ -35,4 +35,5 @@ object Log {
         val content = objectToDump.toString()
         println("[${colour("D", 37)}]\n${colour(content, 37)}")
     }
+
 }
