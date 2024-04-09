@@ -34,13 +34,8 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         )
         loginButton.click()
         DelayControl.sleep(5, 10)
-        try { // non-stale DOM reference indicates login failed.
-            sessionWait.until(ExpectedConditions.stalenessOf(loginButton))
-            Log.status("Login successful at ${LocalDateTime.now()}")
-        } catch (e: TimeoutException) {
-            Log.alert("Login failed at ${LocalDateTime.now()}")
-            throw IllegalStateException("Verify login details...")
-        }
+        verifySettingsPage()
+        Log.status("Login successful at ${LocalDateTime.now()}")
     }
 
     fun getCurrentBio (): String {
