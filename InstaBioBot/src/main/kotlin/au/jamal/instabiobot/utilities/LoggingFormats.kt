@@ -23,17 +23,17 @@ object Log {
     }
 
     fun error(message: String) {
-        println("[${colour("E", 31)}]\n${colour(message, 31)}")
+        println("[${colour("e", 31)}]\n${colour(message, 31)}")
     }
 
     fun trace(errorTraceback: Throwable) {
         val trace = errorTraceback.stackTrace.joinToString("\n")
-        println("[${colour("T", 31)}]\n${colour(trace, 31)}")
+        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
     }
 
     fun dump(objectToDump: Any) {
         val content = objectToDump.toString()
-        println("[${colour("D", 37)}]\n${colour(content, 37)}")
+        println("[${colour("d", 37)}]\n${colour(content, 37)}")
     }
 
 }
