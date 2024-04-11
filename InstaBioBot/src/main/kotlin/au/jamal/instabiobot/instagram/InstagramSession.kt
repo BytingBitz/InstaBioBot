@@ -27,9 +27,9 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         val usernameInput = getElement(By::cssSelector, "input[name='username']")
         val passwordInput = getElement(By::cssSelector, "input[name='password']")
         val loginButton = getElement(By::xpath, "//button[@type='submit']")
-        usernameInput.sendKeys(username)
-        passwordInput.sendKeys(password)
-        loginButton.click()
+        sendKeys(usernameInput, username)
+        sendKeys(passwordInput, password)
+        clickButton(loginButton)
         DelayControl.sleep(5, 10)
         accessSettings() // Verifies login
         Log.status("Login successful at ${LocalDateTime.now()}")
@@ -38,7 +38,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     fun getCurrentBio (): String {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        val bioText = bioElement.getAttribute("value")
+        val bioText = getAttribute(bioElement, "value")
         Log.status("Current bio text: [$bioText] at ${LocalDateTime.now()}")
         return bioText
     }
@@ -47,10 +47,13 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
         val updateButton = getElement(By::xpath, "//*[contains(text(), 'submit')]")
-        bioElement.clear()
-        bioElement.sendKeys(newBioText)
-        updateButton.click()
-        // TODO: Verify bio update
+        sendKeys(bioElement, newBioText)
+        clickButton(updateButton)
+        DelayControl.sleep(5, 10)
+        if (updateButton.isEnabled) {
+            Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
+            throw IllegalStateException("Instagram bio update failed...")
+        }
         Log.status("Updated bio text: [$newBioText] at ${LocalDateTime.now()}")
     }
 
@@ -67,7 +70,38 @@ class InstagramSession (production: Boolean, debug: Boolean) {
             )
         } catch (e: Exception) {
             Log.alert("Failed to access element: [$selector, $expression]")
-            throw IllegalStateException("Invalid DOM references...")
+            throw IllegalStateException("Failed to get element...", e)
+        }
+    }
+
+    private fun getAttribute(element: WebElement, attribute: String): String {
+        try {
+            return requireNotNull(element.getAttribute(attribute))
+        } catch (e: Exception) {
+            Log.alert("Failed to access attribute [$attribute]")
+            Log.dump(element)
+            throw IllegalStateException("Failed to get attribute...", e)
+        }
+    }
+
+    private fun sendKeys(element: WebElement, key: String) {
+        try {
+            element.clear()
+            element.sendKeys(key)
+        } catch (e: Exception) {
+            Log.alert("Failed to send keys to element")
+            Log.dump(element)
+            throw IllegalStateException("Failed to send keys...", e)
+        }
+    }
+
+    private fun clickButton(element: WebElement) {
+        try {
+            element.click()
+        } catch (e: Exception) {
+            Log.alert("Failed to click element")
+            Log.dump(element)
+            throw IllegalStateException("Failed to click element...", e)
         }
     }
 
@@ -77,7 +111,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
             DelayControl.sleep(2, 5)
             if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
                 Log.alert("Failed to access settings")
-                throw IllegalStateException("Session login issue detected...")
+                throw IllegalStateException("Session login issue...")
             }
         }
     }

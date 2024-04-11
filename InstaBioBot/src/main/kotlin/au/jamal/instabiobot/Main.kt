@@ -9,8 +9,7 @@ fun main() {
         instagramSession.login()
         val bio = instagramSession.getCurrentBio()
     } catch (e: Exception) {
-        Log.error(e.message ?: "No message...")
-        Log.trace(e)
+        Log.error(e)
     } finally {
         instagramSession.end()
     }

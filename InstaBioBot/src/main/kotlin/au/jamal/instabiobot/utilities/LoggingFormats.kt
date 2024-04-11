@@ -6,6 +6,11 @@ object Log {
         return "\u001B[${colourCode}m$text\u001B[0m"
     }
 
+    private fun trace(error: Throwable) {
+        val trace = error.stackTrace.joinToString("\n")
+        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
+    }
+
     fun status(message: String) {
         println("[${colour("-", 32)}] ${colour(message, 32)}")
     }
@@ -22,13 +27,15 @@ object Log {
         println("[${colour("!", 31)}] ${colour(message, 31)}")
     }
 
-    fun error(message: String) {
-        println("[${colour("e", 31)}]\n${colour(message, 31)}")
-    }
-
-    fun trace(errorTraceback: Throwable) {
-        val trace = errorTraceback.stackTrace.joinToString("\n")
-        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
+    fun error(error: Throwable) {
+        println("[${colour("e", 31)}]")
+        fun printErrors(error: Throwable?) {
+            if (error == null) return
+            println(colour("(${error::class.simpleName}) ${error.message}", 31))
+            printErrors(error.cause)
+        }
+        printErrors(error)
+        trace(error)
     }
 
     fun dump(objectToDump: Any) {
