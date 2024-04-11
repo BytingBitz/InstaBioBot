@@ -4,7 +4,6 @@ import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URI
 import java.time.Duration
