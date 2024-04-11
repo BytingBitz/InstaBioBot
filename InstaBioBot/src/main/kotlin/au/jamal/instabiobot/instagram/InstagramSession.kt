@@ -38,19 +38,18 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     fun getCurrentBio (): String {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        val bioText = getAttribute(bioElement, "value")
-        Log.status("Current bio text: [$bioText] at ${LocalDateTime.now()}")
-        return bioText
+        return getAttribute(bioElement, "value")
     }
 
     fun updateBio (newBioText: String) {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        val updateButton = getElement(By::xpath, "//*[contains(text(), 'submit')]")
         sendKeys(bioElement, newBioText)
+        val updateButton = getElement(By::xpath, "//*[contains(text(), 'Submit')]")
         clickButton(updateButton)
         DelayControl.sleep(5, 10)
-        if (updateButton.isEnabled) {
+        val updateButtonState = getAttribute(updateButton,"aria-disabled")
+        if (updateButtonState != "true") {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
             throw IllegalStateException("Instagram bio update failed...")
         }

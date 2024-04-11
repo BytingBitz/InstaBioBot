@@ -1,16 +1,7 @@
 package au.jamal.instabiobot
 
-import au.jamal.instabiobot.instagram.InstagramSession
-import au.jamal.instabiobot.utilities.Log
+import au.jamal.instabiobot.control.SessionController
 
 fun main() {
-    val instagramSession = InstagramSession(production = false, debug = true)
-    try {
-        instagramSession.login()
-        val bio = instagramSession.getCurrentBio()
-    } catch (e: Exception) {
-        Log.error(e)
-    } finally {
-        instagramSession.end()
-    }
-}
+    SessionController.sessionLoop(false, true)
+} // TODO: implement provision of arguments

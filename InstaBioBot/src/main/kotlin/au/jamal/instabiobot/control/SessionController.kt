@@ -4,16 +4,20 @@ import au.jamal.instabiobot.instagram.InstagramSession
 import au.jamal.instabiobot.utilities.DelayControl
 import au.jamal.instabiobot.utilities.Log
 import au.jamal.instabiobot.utilities.TextConstructor
+import java.time.LocalDate
+import kotlin.system.exitProcess
 
-const val CONSECUTIVE_FAIL_THRESHOLD = 3
+const val CONSECUTIVE_FAIL_THRESHOLD = 1
+const val DAYS_TO_RESTART = 9
 
 object SessionController {
-    
-    private var restart: Boolean = false
+
     private var failCount: Int = 1
 
     private fun updateHandler(session: InstagramSession) {
-        while (true) {
+        val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART.toLong())
+        Log.info("Calculated end date: $endDate")
+        while (LocalDate.now() <= endDate ) {
             val currentBio = session.getCurrentBio()
             val generatedBio = TextConstructor.buildText()
             if (currentBio != generatedBio) {
@@ -21,29 +25,26 @@ object SessionController {
             }
             DelayControl.sleep(1, 2)
         }
+        Log.status("Restarting session...")
     }
 
     fun sessionLoop(production: Boolean, debug: Boolean) {
-        while (!restart && failCount <= CONSECUTIVE_FAIL_THRESHOLD) {
+        while (failCount <= CONSECUTIVE_FAIL_THRESHOLD) {
             val session = InstagramSession(production, debug)
             try {
                 session.login()
                 updateHandler(session)
             } catch (e: Exception) {
-                session.end()
                 Log.error(e)
                 Log.alert("Session failed: $failCount/3")
-                failCount += 1
                 DelayControl.sleep(60, 120)
-                continue
+                failCount += 1
             } finally {
                 session.end()
             }
         }
-    }
-
-    fun sessionRestart() {
-        restart = true
+        Log.alert("Exiting session controlling")
+        exitProcess(0)
     }
 
 }
