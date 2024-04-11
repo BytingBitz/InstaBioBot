@@ -26,9 +26,9 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         DelayControl.sleep(5, 10)
         val usernameInput = getElement(By::cssSelector, "input[name='username']")
         val passwordInput = getElement(By::cssSelector, "input[name='password']")
-        val loginButton = getElement(By::xpath, "//button[@type='submit']")
         sendKeys(usernameInput, username)
         sendKeys(passwordInput, password)
+        val loginButton = getElement(By::xpath, "//button[@type='submit']")
         clickButton(loginButton)
         DelayControl.sleep(5, 10)
         accessSettings() // Verifies login
@@ -38,7 +38,9 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     fun getCurrentBio (): String {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        return getAttribute(bioElement, "value")
+        val bioText = getAttribute(bioElement, "value")
+        Log.status("Got current bio text [$bioText] at ${LocalDateTime.now()}")
+        return bioText
     }
 
     fun updateBio (newBioText: String) {

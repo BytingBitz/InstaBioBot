@@ -7,21 +7,21 @@ import au.jamal.instabiobot.utilities.TextConstructor
 import java.time.LocalDate
 import kotlin.system.exitProcess
 
-const val CONSECUTIVE_FAIL_THRESHOLD = 1
-const val DAYS_TO_RESTART = 9
-
 object SessionController {
 
     private var failCount: Int = 1
+    private const val CONSECUTIVE_FAIL_THRESHOLD = 1
+    private const val DAYS_TO_RESTART = 9
 
     private fun updateHandler(session: InstagramSession) {
         val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART.toLong())
         Log.info("Calculated end date: $endDate")
+        var currentBio = session.getCurrentBio()
         while (LocalDate.now() <= endDate ) {
-            val currentBio = session.getCurrentBio()
             val generatedBio = TextConstructor.buildText()
             if (currentBio != generatedBio) {
                 session.updateBio(generatedBio)
+                currentBio = generatedBio
             }
             DelayControl.sleep(1, 2)
         }
