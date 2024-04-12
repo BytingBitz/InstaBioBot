@@ -10,7 +10,7 @@ import kotlin.system.exitProcess
 object SessionController {
 
     private var failCount: Int = 1
-    private const val CONSECUTIVE_FAIL_THRESHOLD: Int = 3
+    private const val CONSECUTIVE_FAIL_LIMIT: Int = 3
     private const val DAYS_TO_RESTART: Long = 9
 
     private fun bioUpdateHandler(session: InstagramSession) {
@@ -30,14 +30,14 @@ object SessionController {
     }
 
     fun mainSessionLoop(production: Boolean, debug: Boolean) {
-        while (failCount <= CONSECUTIVE_FAIL_THRESHOLD) {
+        while (failCount <= CONSECUTIVE_FAIL_LIMIT) {
             val session = InstagramSession(production, debug)
             try {
                 session.login()
                 bioUpdateHandler(session)
             } catch (e: Exception) {
                 Log.error(e)
-                Log.alert("Session failed: $failCount/3")
+                Log.alert("Session failed: $failCount/$CONSECUTIVE_FAIL_LIMIT")
                 DelayControl.sleep(60, 120)
                 failCount += 1
             } finally {
