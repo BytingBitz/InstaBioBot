@@ -10,11 +10,11 @@ import kotlin.system.exitProcess
 object SessionController {
 
     private var failCount: Int = 1
-    private const val CONSECUTIVE_FAIL_THRESHOLD = 1
-    private const val DAYS_TO_RESTART = 9
+    private const val CONSECUTIVE_FAIL_THRESHOLD: Int = 1
+    private const val DAYS_TO_RESTART: Long = 9
 
     private fun updateHandler(session: InstagramSession) {
-        val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART.toLong())
+        val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART)
         Log.info("Calculated end date: $endDate")
         var currentBio = session.getCurrentBio()
         while (LocalDate.now() <= endDate ) {
@@ -24,6 +24,7 @@ object SessionController {
                 currentBio = generatedBio
             }
             DelayControl.sleep(1, 2)
+            failCount = 1
         }
         Log.status("Restarting session...")
     }

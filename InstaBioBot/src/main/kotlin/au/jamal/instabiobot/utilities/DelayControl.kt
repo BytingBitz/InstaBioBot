@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 object DelayControl {
 
-    private val randomGenerator = Random.Default
+    private val randomGenerator: Random = Random.Default
 
     fun sleep(minDuration: Int = 5, maxDuration: Int = 10) {
         try {

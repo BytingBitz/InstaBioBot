@@ -9,9 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
 import java.time.LocalDateTime
 
-const val INSTAGRAM_URL = "https://www.instagram.com/"
-const val INSTAGRAM_SETTINGS_URL = "https://www.instagram.com/accounts/edit/"
-const val SELENIUM_TIMEOUT = 10L
+const val INSTAGRAM_URL: String = "https://www.instagram.com/"
+const val INSTAGRAM_SETTINGS_URL: String = "https://www.instagram.com/accounts/edit/"
+const val SELENIUM_TIMEOUT: Long = 10
 
 class InstagramSession (production: Boolean, debug: Boolean) {
 
