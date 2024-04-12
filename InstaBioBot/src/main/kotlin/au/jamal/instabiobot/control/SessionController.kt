@@ -17,7 +17,7 @@ object SessionController {
         val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART)
         Log.info("Calculated end date: $endDate")
         var currentBio = session.getCurrentBio()
-        while (LocalDate.now() <= endDate ) {
+        while (LocalDate.now() < endDate ) {
             val generatedBio = TextConstructor.buildText()
             if (currentBio != generatedBio) {
                 session.updateBio(generatedBio)
