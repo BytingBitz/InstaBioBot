@@ -44,7 +44,7 @@ object SessionController {
                 session.end()
             }
         }
-        Log.alert("Exiting session controlling")
+        Log.alert("Exiting main session loop")
         exitProcess(0)
     }
 

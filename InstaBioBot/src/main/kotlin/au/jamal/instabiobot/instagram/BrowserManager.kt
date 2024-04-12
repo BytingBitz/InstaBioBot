@@ -35,7 +35,14 @@ class BrowserManager (production: Boolean, debug: Boolean) {
 
     fun end() {
         Log.warn("Killing Selenium session...")
-        browser.quit()
+        try {
+            browser.close()
+            browser.quit()
+        } catch (e: Exception) {
+            Log.alert("Failed to kill selenium driver")
+            throw IllegalStateException("End browser failed...", e)
+        }
+        Log.status("Selenium session ended...")
     }
 
 }
