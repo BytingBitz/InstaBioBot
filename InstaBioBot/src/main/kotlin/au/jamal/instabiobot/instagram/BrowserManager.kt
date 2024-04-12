@@ -38,11 +38,10 @@ class BrowserManager (production: Boolean, debug: Boolean) {
         try {
             browser.close()
             browser.quit()
+            Log.status("Selenium session ended...")
         } catch (e: Exception) {
             Log.alert("Failed to kill selenium driver")
-            throw IllegalStateException("End browser failed...", e)
         }
-        Log.status("Selenium session ended...")
     }
 
 }
