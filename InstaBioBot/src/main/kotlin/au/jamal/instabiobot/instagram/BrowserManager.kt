@@ -34,6 +34,7 @@ class BrowserManager (production: Boolean, debug: Boolean) {
     }
 
     fun end() {
+        Log.warn("Killing Selenium session...")
         browser.quit()
     }
 

@@ -2,15 +2,6 @@ package au.jamal.instabiobot.utilities
 
 object Log {
 
-    private fun colour(text: String, colourCode: Int): String {
-        return "\u001B[${colourCode}m$text\u001B[0m"
-    }
-
-    private fun trace(error: Throwable) {
-        val trace = error.stackTrace.joinToString("\n")
-        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
-    }
-
     fun status(message: String) {
         println("[${colour("-", 32)}] ${colour(message, 32)}")
     }
@@ -41,6 +32,15 @@ object Log {
     fun dump(objectToDump: Any) {
         val content = objectToDump.toString()
         println("[${colour("d", 37)}]\n${colour(content, 37)}")
+    }
+
+    private fun colour(text: String, colourCode: Int): String {
+        return "\u001B[${colourCode}m$text\u001B[0m"
+    }
+
+    private fun trace(error: Throwable) {
+        val trace = error.stackTrace.joinToString("\n")
+        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
     }
 
 }

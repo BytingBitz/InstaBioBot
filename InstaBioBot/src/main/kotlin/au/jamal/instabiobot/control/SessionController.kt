@@ -10,15 +10,15 @@ import kotlin.system.exitProcess
 object SessionController {
 
     private var failCount: Int = 1
-    private const val CONSECUTIVE_FAIL_THRESHOLD: Int = 1
+    private const val CONSECUTIVE_FAIL_THRESHOLD: Int = 3
     private const val DAYS_TO_RESTART: Long = 9
 
-    private fun updateHandler(session: InstagramSession) {
-        val endDate = LocalDate.now().plusDays(DAYS_TO_RESTART)
-        Log.info("Calculated end date: $endDate")
-        var currentBio = session.getCurrentBio()
-        while (LocalDate.now() < endDate ) {
-            val generatedBio = TextConstructor.buildText()
+    private fun bioUpdateHandler(session: InstagramSession) {
+        val restartDate = LocalDate.now().plusDays(DAYS_TO_RESTART)
+        Log.info("Calculated restart date: $restartDate")
+        var currentBio: String = session.getCurrentBio()
+        while (LocalDate.now() < restartDate ) {
+            val generatedBio: String = TextConstructor.buildBioText()
             if (currentBio != generatedBio) {
                 session.updateBio(generatedBio)
                 currentBio = generatedBio
@@ -29,12 +29,12 @@ object SessionController {
         Log.status("Restarting session...")
     }
 
-    fun sessionLoop(production: Boolean, debug: Boolean) {
+    fun mainSessionLoop(production: Boolean, debug: Boolean) {
         while (failCount <= CONSECUTIVE_FAIL_THRESHOLD) {
             val session = InstagramSession(production, debug)
             try {
                 session.login()
-                updateHandler(session)
+                bioUpdateHandler(session)
             } catch (e: Exception) {
                 Log.error(e)
                 Log.alert("Session failed: $failCount/3")

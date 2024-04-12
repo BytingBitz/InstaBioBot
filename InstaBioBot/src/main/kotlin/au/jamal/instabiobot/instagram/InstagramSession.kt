@@ -21,7 +21,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     )
 
     fun login() {
-        val (username, password) = LoginSecrets.envLoad()
+        val (username: String, password: String) = LoginSecrets.envLoad()
         session.browser.get(INSTAGRAM_URL)
         DelayControl.sleep(5, 10)
         val usernameInput = getElement(By::cssSelector, "input[name='username']")
@@ -38,7 +38,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     fun getCurrentBio (): String {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        val bioText = getAttribute(bioElement, "value")
+        val bioText: String = getAttribute(bioElement, "value")
         Log.status("Got current bio text [$bioText] at ${LocalDateTime.now()}")
         return bioText
     }
@@ -50,7 +50,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         val updateButton = getElement(By::xpath, "//*[contains(text(), 'Submit')]")
         clickButton(updateButton)
         DelayControl.sleep(5, 10)
-        val updateButtonState = getAttribute(updateButton,"aria-disabled")
+        val updateButtonState: String = getAttribute(updateButton,"aria-disabled")
         if (updateButtonState != "true") {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
             throw IllegalStateException("Instagram bio update failed...")
@@ -59,13 +59,12 @@ class InstagramSession (production: Boolean, debug: Boolean) {
     }
 
     fun end() {
-        Log.warn("Killing Selenium session...")
         session.end()
     }
 
     private fun getElement(selector: (String) -> By, expression: String): WebElement {
         try {
-            val locator = selector(expression)
+            val locator: By = selector(expression)
             return sessionWait.until(
                 ExpectedConditions.presenceOfElementLocated(locator)
             )

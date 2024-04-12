@@ -11,7 +11,7 @@ object TextConstructor {
     // buildText called every ~2s, bio updates when return is not current text
     // NOTE: it is strongly recommended to not update more than once each hour
 
-    fun buildText(): String {
+    fun buildBioText(): String {
         val currentDateTime = LocalDateTime.now(ZoneId.of("Australia/Queensland"))
         val hourFormatter = DateTimeFormatter.ofPattern("ha", Locale.getDefault())
         val hour = currentDateTime.format(hourFormatter).lowercase(Locale.getDefault())
