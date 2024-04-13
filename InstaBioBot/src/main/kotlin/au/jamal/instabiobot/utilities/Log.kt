@@ -31,7 +31,7 @@ object Log {
 
     fun dump(objectToDump: Any) {
         val content = objectToDump.toString()
-        println("[${colour("d", 37)}]\n${colour(content, 37)}")
+        println("[${colour("d", 37)}] ${colour(content, 37)}")
     }
 
     private fun colour(text: String, colourCode: Int): String {
