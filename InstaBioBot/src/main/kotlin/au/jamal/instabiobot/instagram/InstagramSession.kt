@@ -13,14 +13,14 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     fun login() {
         session.browser.get(Companion.INSTAGRAM_URL)
-        DelayControl.sleep(5, 10)
+        DelayControl.sleep(5..10)
         val usernameInput = sessionInterface.getUsernameElement()
         val passwordInput = sessionInterface.getPasswordElement()
         sendKeys(usernameInput, credentials.username)
         sendKeys(passwordInput, credentials.password)
         val loginButton = sessionInterface.getLoginElement()
         clickButton(loginButton)
-        DelayControl.sleep(5, 10)
+        DelayControl.sleep(5..10)
         accessSettings() // Verifies login
         Log.status("Login successful at ${LocalDateTime.now()}")
     }
@@ -38,7 +38,7 @@ class InstagramSession(production: Boolean, debug: Boolean) {
         sendKeys(bioElement, newBioText)
         val updateButton = sessionInterface.getUpdateElement()
         clickButton(updateButton)
-        DelayControl.sleep(5, 10)
+        DelayControl.sleep(5..10)
         val updateButtonDisabled = sessionInterface.getUpdateAriaAttribute()
         if (updateButtonDisabled != "true") {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
@@ -75,7 +75,7 @@ class InstagramSession(production: Boolean, debug: Boolean) {
     private fun accessSettings() {
         if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
             session.browser.get(Companion.INSTAGRAM_SETTINGS_URL)
-            DelayControl.sleep(2, 5)
+            DelayControl.sleep(2..5)
             if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
                 Log.alert("Failed to access settings")
                 throw IllegalStateException("Session login issue...")

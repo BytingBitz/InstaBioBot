@@ -23,7 +23,7 @@ object SessionController {
                 session.updateBio(generatedBio)
                 currentBio = generatedBio
             }
-            DelayControl.sleep(1, 2)
+            DelayControl.sleep(1..2)
             failCount = 1
         }
         Log.status("Restarting session...")
@@ -38,7 +38,7 @@ object SessionController {
             } catch (e: Exception) {
                 Log.error(e)
                 Log.alert("Session failed: $failCount/$CONSECUTIVE_FAIL_LIMIT")
-                DelayControl.sleep(60, 120)
+                DelayControl.sleep(60..120)
                 failCount += 1
             } finally {
                 session.end()

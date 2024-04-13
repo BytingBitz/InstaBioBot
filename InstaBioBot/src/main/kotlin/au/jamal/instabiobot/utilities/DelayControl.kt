@@ -1,14 +1,15 @@
 package au.jamal.instabiobot.utilities
 
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 object DelayControl {
 
     private val randomGenerator: Random = Random.Default
 
-    fun sleep(minDuration: Int = 5, maxDuration: Int = 10) {
+    fun sleep(range: IntRange) {
         try {
-            val durationSeconds = randomGenerator.nextInt(minDuration, maxDuration + 1)
+            val durationSeconds = randomGenerator.nextInt(range)
             val durationMillis = durationSeconds * 1000L
             Thread.sleep(durationMillis)
         } catch (e: Exception) {
