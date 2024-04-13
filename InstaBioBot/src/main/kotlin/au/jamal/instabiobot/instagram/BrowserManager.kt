@@ -8,7 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URI
 import java.time.Duration
 
-class BrowserManager (production: Boolean, debug: Boolean) {
+class BrowserManager(production: Boolean, debug: Boolean) {
 
     val browser: WebDriver
 

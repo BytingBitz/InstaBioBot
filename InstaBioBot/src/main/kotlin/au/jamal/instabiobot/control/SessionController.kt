@@ -17,7 +17,7 @@ object SessionController {
         val restartDate = LocalDate.now().plusDays(DAYS_TO_RESTART)
         Log.info("Calculated restart date: $restartDate")
         var currentBio: String = session.getCurrentBio()
-        while (LocalDate.now() < restartDate ) {
+        while (LocalDate.now() < restartDate) {
             val generatedBio: String = TextConstructor.buildBioText()
             if (currentBio != generatedBio) {
                 session.updateBio(generatedBio)

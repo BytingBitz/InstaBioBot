@@ -13,7 +13,7 @@ const val INSTAGRAM_URL: String = "https://www.instagram.com/"
 const val INSTAGRAM_SETTINGS_URL: String = "https://www.instagram.com/accounts/edit/"
 const val SELENIUM_TIMEOUT: Long = 10
 
-class InstagramSession (production: Boolean, debug: Boolean) {
+class InstagramSession(production: Boolean, debug: Boolean) {
 
     private val session: BrowserManager = BrowserManager(production, debug)
     private val sessionWait: WebDriverWait = WebDriverWait(
@@ -35,7 +35,7 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         Log.status("Login successful at ${LocalDateTime.now()}")
     }
 
-    fun getCurrentBio (): String {
+    fun getCurrentBio(): String {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
         val bioText: String = getAttribute(bioElement, "value")
@@ -43,14 +43,14 @@ class InstagramSession (production: Boolean, debug: Boolean) {
         return bioText
     }
 
-    fun updateBio (newBioText: String) {
+    fun updateBio(newBioText: String) {
         accessSettings()
         val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
         sendKeys(bioElement, newBioText)
         val updateButton = getElement(By::xpath, "//*[contains(text(), 'Submit')]")
         clickButton(updateButton)
         DelayControl.sleep(5, 10)
-        val updateButtonState: String = getAttribute(updateButton,"aria-disabled")
+        val updateButtonState: String = getAttribute(updateButton, "aria-disabled")
         if (updateButtonState != "true") {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
             throw IllegalStateException("Instagram bio update failed...")
