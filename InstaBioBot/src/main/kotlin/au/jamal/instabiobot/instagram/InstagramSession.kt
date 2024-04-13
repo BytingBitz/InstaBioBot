@@ -12,7 +12,7 @@ class InstagramSession(production: Boolean, debug: Boolean) {
     private val credentials = CredentialManager()
 
     fun login() {
-        session.browser.get(Companion.INSTAGRAM_URL)
+        session.browser.get(INSTAGRAM_URL)
         DelayControl.sleep(5..10)
         val usernameInput = sessionInterface.getUsernameElement()
         val passwordInput = sessionInterface.getPasswordElement()
@@ -73,10 +73,10 @@ class InstagramSession(production: Boolean, debug: Boolean) {
     }
 
     private fun accessSettings() {
-        if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
-            session.browser.get(Companion.INSTAGRAM_SETTINGS_URL)
+        if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
+            session.browser.get(INSTAGRAM_SETTINGS_URL)
             DelayControl.sleep(2..5)
-            if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
+            if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
                 Log.alert("Failed to access settings")
                 throw IllegalStateException("Session login issue...")
             }

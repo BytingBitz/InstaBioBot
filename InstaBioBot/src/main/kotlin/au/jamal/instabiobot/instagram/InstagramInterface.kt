@@ -9,7 +9,7 @@ import java.time.Duration
 
 class InstagramInterface(session: BrowserManager) {
 
-    private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(Companion.SELENIUM_TIMEOUT))
+    private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(SELENIUM_TIMEOUT))
 
     fun getUsernameElement(): WebElement {
         return getElement(By::cssSelector, "input[name='username']")
