@@ -3,7 +3,7 @@ package au.jamal.instabiobot.utilities
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-object DelayControl {
+object Delay {
 
     private val randomGenerator: Random = Random.Default
 

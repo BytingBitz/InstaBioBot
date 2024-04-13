@@ -1,9 +1,9 @@
 package au.jamal.instabiobot.control
 
 import au.jamal.instabiobot.instagram.InstagramSession
-import au.jamal.instabiobot.utilities.DelayControl
+import au.jamal.instabiobot.utilities.Delay
 import au.jamal.instabiobot.utilities.Log
-import au.jamal.instabiobot.utilities.TextConstructor
+import au.jamal.instabiobot.utilities.Bio
 import java.time.LocalDate
 import kotlin.system.exitProcess
 
@@ -18,12 +18,12 @@ object SessionController {
         Log.info("Calculated restart date: $restartDate")
         var currentBio: String = session.getCurrentBio()
         while (LocalDate.now() < restartDate) {
-            val generatedBio: String = TextConstructor.buildBioText()
+            val generatedBio: String = Bio.buildText()
             if (currentBio != generatedBio) {
                 session.updateBio(generatedBio)
                 currentBio = generatedBio
             }
-            DelayControl.sleep(1..2)
+            Delay.sleep(1..2)
             failCount = 1
         }
         Log.status("Restarting session...")
@@ -38,7 +38,7 @@ object SessionController {
             } catch (e: Exception) {
                 Log.error(e)
                 Log.alert("Session failed: $failCount/$CONSECUTIVE_FAIL_LIMIT")
-                DelayControl.sleep(60..120)
+                Delay.sleep(60..120)
                 failCount += 1
             } finally {
                 session.end()
