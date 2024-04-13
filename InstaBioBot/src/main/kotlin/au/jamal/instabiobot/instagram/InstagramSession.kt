@@ -9,15 +9,15 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     private val session = BrowserManager(production, debug)
     private val sessionInterface = InstagramInterface(session)
+    private val credentials = Credentials()
 
     fun login() {
-        val (username: String, password: String) = LoginSecrets.envLoad()
         session.browser.get(Companion.INSTAGRAM_URL)
         DelayControl.sleep(5, 10)
         val usernameInput = sessionInterface.getUsernameElement()
         val passwordInput = sessionInterface.getPasswordElement()
-        sendKeys(usernameInput, username)
-        sendKeys(passwordInput, password)
+        sendKeys(usernameInput, credentials.username)
+        sendKeys(passwordInput, credentials.password)
         val loginButton = sessionInterface.getLoginElement()
         clickButton(loginButton)
         DelayControl.sleep(5, 10)
