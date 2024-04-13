@@ -5,10 +5,6 @@ import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.WebElement
 import java.time.LocalDateTime
 
-const val INSTAGRAM_URL: String = "https://www.instagram.com/"
-const val INSTAGRAM_SETTINGS_URL: String = "https://www.instagram.com/accounts/edit/"
-const val SELENIUM_TIMEOUT: Long = 10
-
 class InstagramSession(production: Boolean, debug: Boolean) {
 
     private val session = BrowserManager(production, debug)
@@ -16,7 +12,7 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     fun login() {
         val (username: String, password: String) = LoginSecrets.envLoad()
-        session.browser.get(INSTAGRAM_URL)
+        session.browser.get(Companion.INSTAGRAM_URL)
         DelayControl.sleep(5, 10)
         val usernameInput = sessionInterface.getUsernameElement()
         val passwordInput = sessionInterface.getPasswordElement()
@@ -77,14 +73,19 @@ class InstagramSession(production: Boolean, debug: Boolean) {
     }
 
     private fun accessSettings() {
-        if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
-            session.browser.get(INSTAGRAM_SETTINGS_URL)
+        if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
+            session.browser.get(Companion.INSTAGRAM_SETTINGS_URL)
             DelayControl.sleep(2, 5)
-            if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
+            if (session.browser.currentUrl != Companion.INSTAGRAM_SETTINGS_URL) {
                 Log.alert("Failed to access settings")
                 throw IllegalStateException("Session login issue...")
             }
         }
+    }
+
+    companion object {
+        private const val INSTAGRAM_URL: String = "https://www.instagram.com/"
+        private const val INSTAGRAM_SETTINGS_URL: String = "https://www.instagram.com/accounts/edit/"
     }
 
 }

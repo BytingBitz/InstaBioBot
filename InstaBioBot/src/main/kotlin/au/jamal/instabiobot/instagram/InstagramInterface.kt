@@ -9,7 +9,7 @@ import java.time.Duration
 
 class InstagramInterface(session: BrowserManager) {
 
-    private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(SELENIUM_TIMEOUT))
+    private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(Companion.SELENIUM_TIMEOUT))
 
     fun getUsernameElement(): WebElement {
         return getElement(By::cssSelector, "input[name='username']")
@@ -61,6 +61,10 @@ class InstagramInterface(session: BrowserManager) {
             Log.dump(element)
             throw IllegalStateException("Failed to get attribute...", e)
         }
+    }
+
+    companion object {
+        private const val SELENIUM_TIMEOUT: Long = 10
     }
 
 }
