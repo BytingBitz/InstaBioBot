@@ -9,7 +9,7 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     private val session = BrowserManager(production, debug)
     private val sessionInterface = InstagramInterface(session)
-    private val credentials = Credentials()
+    private val credentials = CredentialManager()
 
     fun login() {
         session.browser.get(Companion.INSTAGRAM_URL)
