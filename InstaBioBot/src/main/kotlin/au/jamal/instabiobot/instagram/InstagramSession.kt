@@ -2,11 +2,7 @@ package au.jamal.instabiobot.instagram
 
 import au.jamal.instabiobot.utilities.DelayControl
 import au.jamal.instabiobot.utilities.Log
-import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.WebDriverWait
-import java.time.Duration
 import java.time.LocalDateTime
 
 const val INSTAGRAM_URL: String = "https://www.instagram.com/"
@@ -15,20 +11,18 @@ const val SELENIUM_TIMEOUT: Long = 10
 
 class InstagramSession(production: Boolean, debug: Boolean) {
 
-    private val session: BrowserManager = BrowserManager(production, debug)
-    private val sessionWait: WebDriverWait = WebDriverWait(
-        session.browser, Duration.ofSeconds(SELENIUM_TIMEOUT)
-    )
+    private val session = BrowserManager(production, debug)
+    private val sessionInterface = InstagramInterface(session)
 
     fun login() {
         val (username: String, password: String) = LoginSecrets.envLoad()
         session.browser.get(INSTAGRAM_URL)
         DelayControl.sleep(5, 10)
-        val usernameInput = getElement(By::cssSelector, "input[name='username']")
-        val passwordInput = getElement(By::cssSelector, "input[name='password']")
+        val usernameInput = sessionInterface.getUsernameElement()
+        val passwordInput = sessionInterface.getPasswordElement()
         sendKeys(usernameInput, username)
         sendKeys(passwordInput, password)
-        val loginButton = getElement(By::xpath, "//button[@type='submit']")
+        val loginButton = sessionInterface.getLoginElement()
         clickButton(loginButton)
         DelayControl.sleep(5, 10)
         accessSettings() // Verifies login
@@ -37,21 +31,20 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     fun getCurrentBio(): String {
         accessSettings()
-        val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
-        val bioText: String = getAttribute(bioElement, "value")
+        val bioText = sessionInterface.getBioTextAttribute()
         Log.status("Got current bio text [$bioText] at ${LocalDateTime.now()}")
         return bioText
     }
 
     fun updateBio(newBioText: String) {
         accessSettings()
-        val bioElement = getElement(By::cssSelector, "textarea[id='pepBio']")
+        val bioElement = sessionInterface.getBioElement()
         sendKeys(bioElement, newBioText)
-        val updateButton = getElement(By::xpath, "//*[contains(text(), 'Submit')]")
+        val updateButton = sessionInterface.getUpdateElement()
         clickButton(updateButton)
         DelayControl.sleep(5, 10)
-        val updateButtonState: String = getAttribute(updateButton, "aria-disabled")
-        if (updateButtonState != "true") {
+        val updateButtonDisabled = sessionInterface.getUpdateAriaAttribute()
+        if (updateButtonDisabled != "true") {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
             throw IllegalStateException("Instagram bio update failed...")
         }
@@ -60,28 +53,6 @@ class InstagramSession(production: Boolean, debug: Boolean) {
 
     fun end() {
         session.end()
-    }
-
-    private fun getElement(selector: (String) -> By, expression: String): WebElement {
-        try {
-            val locator: By = selector(expression)
-            return sessionWait.until(
-                ExpectedConditions.presenceOfElementLocated(locator)
-            )
-        } catch (e: Exception) {
-            Log.alert("Failed to access element: [$selector, $expression]")
-            throw IllegalStateException("Failed to get element...", e)
-        }
-    }
-
-    private fun getAttribute(element: WebElement, attribute: String): String {
-        try {
-            return requireNotNull(element.getAttribute(attribute))
-        } catch (e: Exception) {
-            Log.alert("Failed to access attribute [$attribute]")
-            Log.dump(element)
-            throw IllegalStateException("Failed to get attribute...", e)
-        }
     }
 
     private fun sendKeys(element: WebElement, key: String) {
