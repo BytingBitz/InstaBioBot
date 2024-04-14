@@ -1,0 +1,5 @@
+productionMode: true
+debugMode: false
+timeoutSeconds: 15
+failLimit: 3
+restartInDays: 9
