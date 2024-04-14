@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM adoptopenjdk:21-jdk-alpine3.15 AS builder
+FROM gradle:4.7.0-jdk8-alpine AS build
 
 WORKDIR /app
 
