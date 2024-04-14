@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  selenium:
+    container_name: browser
+    image: "selenium/standalone-chrome"
+    shm_size: "500mb"
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1000M
+    environment:
+      VNC_NO_PASSWORD: 1
+      SE_NODE_SESSION_TIMEOUT: 999999999
+    networks:
+      - web
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  instabiobot:
+    container_name: instabiobot
+    read_only: true
+    build: .
+    env_file: .env
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1000M
+    links:
+      - "selenium:selenium"
+    depends_on:
+      - selenium
+    networks:
+      - web
+
+networks:
+  web:
+    name: instabiobot_web
