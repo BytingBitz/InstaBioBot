@@ -44,10 +44,7 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
     private fun startBrowser(options: ChromeOptions, production: Boolean, timeout: Long): WebDriver {
         val browser: WebDriver = try {
             if (production) {
-                val remoteDriver = RemoteWebDriver(
-                    URI.create("http://selenium:4444/wd/hub").toURL(),
-                    options
-                )
+                val remoteDriver = RemoteWebDriver(URI.create("http://selenium:4444/wd/hub").toURL(), options)
                 Log.status("Started production browser session")
                 remoteDriver
             } else {
@@ -56,7 +53,7 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
                 localDriver
             }
         } catch (e: Exception) {
-            Log.alert("Failed to start production browser...")
+            Log.alert("Failed to start browser...")
             Log.error(e)
             exitProcess(0)
         }
