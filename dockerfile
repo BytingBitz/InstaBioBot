@@ -1,16 +1,22 @@
-FROM eclipse-temurin:21-jre-alpine
+# Stage 1: Build the application
+FROM adoptopenjdk:21-jdk-alpine3.15 AS builder
+
+WORKDIR /app
+
+COPY build.gradle.kts settings.gradle.kts /app/
+
+COPY src /app/src
+
+RUN ./gradlew build
+
+# Stage 2: Create final image
+FROM adoptopenjdk:21-jdk-alpine3.15
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/instaBioBot.jar /app/instaBioBot.jar
 
 RUN adduser --disabled-password --gecos '' --shell /usr/sbin/nologin user
-
-WORKDIR /instabiobot
-
-COPY . .
-
-CMD ["./gradlew", "clean", "bootJar"]
-
-COPY /build/libs/*.jar app.jar
-
-# RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x start.sh
 
@@ -18,4 +24,5 @@ RUN chown -R user:user /app
 
 USER user
 
+# Start the application
 CMD ["bash", "./start.sh"]
