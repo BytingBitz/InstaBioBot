@@ -13,16 +13,9 @@ import kotlin.system.exitProcess
 
 class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
 
-    val browser: WebDriver
-    val wait: WebDriverWait
-
-    init {
-        Log.info("Starting Selenium: production [$production], debug [$debug]")
-        val options = configureOptions(debug)
-        browser = startBrowser(options, production)
-        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeout))
-        wait = WebDriverWait(browser, Duration.ofSeconds(timeout))
-    }
+    private val options: ChromeOptions = configureOptions(debug)
+    val browser: WebDriver = startBrowser(options, production, timeout)
+    val wait = WebDriverWait(browser, Duration.ofSeconds(timeout))
 
     fun end() {
         Log.warn("Killing Selenium session...")
@@ -48,7 +41,7 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
         return options
     }
 
-    private fun startBrowser(options: ChromeOptions, production: Boolean): WebDriver {
+    private fun startBrowser(options: ChromeOptions, production: Boolean, timeout: Long): WebDriver {
         val browser: WebDriver = try {
             if (production) {
                 val remoteDriver = RemoteWebDriver(
@@ -67,6 +60,7 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
             Log.error(e)
             exitProcess(0)
         }
+        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeout))
         return browser
     }
 
