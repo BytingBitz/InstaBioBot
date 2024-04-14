@@ -23,23 +23,13 @@ object ConfigHandler {
 
     fun loadSettings(): ConfigSettings {
         if (!configFile.exists()) {
-            Log.warn("No config file exists, generated default:")
-            buildConfig()
+            Log.alert("No config file exists, exiting...")
+            exitProcess(0)
         }
         val settings = getConfig()
         Log.status("Loaded config:")
         Log.dump(settings)
         return settings
-    }
-
-    private fun buildConfig() {
-        val yamlString = buildString {
-            configClass.declaredFields.forEach { field ->
-                field.isAccessible = true
-                appendLine("${field.name}: ${field.get(ConfigSettings())}")
-            }
-        }
-        configFile.writeText(yamlString)
     }
 
     private fun getConfig(): ConfigSettings {
