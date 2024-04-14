@@ -10,7 +10,7 @@ COPY src /app/src
 RUN ./gradlew build
 
 # Stage 2: Create final image
-FROM adoptopenjdk:21-jdk-alpine3.15
+FROM openjdk:8-jre-slim
 
 WORKDIR /app
 
