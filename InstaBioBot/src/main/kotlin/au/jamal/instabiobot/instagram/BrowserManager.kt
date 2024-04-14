@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.net.URI
 import java.time.Duration
+import java.util.logging.Level
 
 class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
 
@@ -20,6 +21,8 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
         if (!debug) {
             options.addArguments("--headless")
             options.addArguments("--disable-logging")
+            options.setExperimentalOption("excludeSwitches", listOf("enable-automation"))
+            java.util.logging.Logger.getLogger("org.openqa.selenium").level = Level.OFF
         } else {
             Log.warn("Running in debug mode...")
         }
