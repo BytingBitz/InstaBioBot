@@ -6,9 +6,11 @@ import java.io.File
 import kotlin.system.exitProcess
 
 data class ConfigSettings(
-    val production: Boolean = true,
-    val debug: Boolean = false,
-    val timeout: Long = 15
+    val productionMode: Boolean = true,
+    val debugMode: Boolean = false,
+    val timeoutSeconds: Long = 15,
+    val failLimit: Int = 3,
+    val restartInDays: Long = 9,
 )
 
 object ConfigHandler {

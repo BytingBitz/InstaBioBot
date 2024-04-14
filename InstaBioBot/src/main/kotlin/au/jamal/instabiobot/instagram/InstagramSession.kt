@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 class InstagramSession(config: ConfigSettings) {
 
-    private val session = BrowserManager(config.production, config.debug, config.timeout)
+    private val session = BrowserManager(config.productionMode, config.debugMode, config.timeoutSeconds)
     private val sessionInterface = InstagramInterface(session)
     private val credentials = CredentialManager()
 
