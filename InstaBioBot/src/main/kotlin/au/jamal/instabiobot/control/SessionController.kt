@@ -29,9 +29,9 @@ object SessionController {
         Log.status("Restarting session...")
     }
 
-    fun mainSessionLoop(production: Boolean, debug: Boolean) {
+    fun mainSessionLoop(config: ConfigSettings) {
         while (failCount <= CONSECUTIVE_FAIL_LIMIT) {
-            val session = InstagramSession(production, debug)
+            val session = InstagramSession(config)
             try {
                 session.login()
                 bioUpdateHandler(session)

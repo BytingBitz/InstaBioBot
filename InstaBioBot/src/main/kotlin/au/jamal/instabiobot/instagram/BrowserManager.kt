@@ -5,12 +5,14 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.RemoteWebDriver
+import org.openqa.selenium.support.ui.WebDriverWait
 import java.net.URI
 import java.time.Duration
 
-class BrowserManager(production: Boolean, debug: Boolean) {
+class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
 
     val browser: WebDriver
+    val wait: WebDriverWait
 
     init {
         val options = ChromeOptions()
@@ -30,7 +32,8 @@ class BrowserManager(production: Boolean, debug: Boolean) {
             browser = ChromeDriver(options)
             Log.warn("Running in local mode...")
         }
-        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(5))
+        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeout))
+        wait = WebDriverWait(browser, Duration.ofSeconds(timeout))
     }
 
     fun end() {

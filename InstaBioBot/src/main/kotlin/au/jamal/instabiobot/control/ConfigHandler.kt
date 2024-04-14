@@ -59,7 +59,7 @@ object ConfigHandler {
                 ?: throw IllegalArgumentException("No matching constructor found")
             return constructor.newInstance(*args) as ConfigSettings
         } catch (e: IllegalArgumentException) {
-            Log.alert("Failed to build config, verify expected types:")
+            Log.alert("Failed to load config, verify expected types:")
             val expectedTypes = getExpectedTypes()
             Log.dump(expectedTypes)
             Log.alert("Exiting session launch...")

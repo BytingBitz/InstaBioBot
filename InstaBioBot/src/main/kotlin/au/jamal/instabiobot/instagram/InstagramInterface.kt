@@ -5,11 +5,10 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
-import java.time.Duration
 
 class InstagramInterface(session: BrowserManager) {
 
-    private val sessionWait: WebDriverWait = WebDriverWait(session.browser, Duration.ofSeconds(SELENIUM_TIMEOUT))
+    private val wait: WebDriverWait = session.wait
 
     fun getUsernameElement(): WebElement {
         return getElement(By::cssSelector, "input[name='username']")
@@ -44,7 +43,7 @@ class InstagramInterface(session: BrowserManager) {
     private fun getElement(selector: (String) -> By, expression: String): WebElement {
         try {
             val locator: By = selector(expression)
-            return sessionWait.until(
+            return wait.until(
                 ExpectedConditions.presenceOfElementLocated(locator)
             )
         } catch (e: Exception) {
@@ -61,10 +60,6 @@ class InstagramInterface(session: BrowserManager) {
             Log.dump(element)
             throw IllegalStateException("Failed to get attribute...", e)
         }
-    }
-
-    companion object {
-        private const val SELENIUM_TIMEOUT: Long = 10
     }
 
 }
