@@ -1,28 +1,28 @@
-# Stage 1: Build the application
-FROM gradle:4.7.0-jdk8-alpine AS build
+# Stage 1: Build
+FROM gradle:8.5.0-jdk8 AS build
 
-WORKDIR /app
+COPY --chown=gradle:gradle . /home/gradle/src
 
-COPY build.gradle.kts settings.gradle.kts /app/
+WORKDIR /home/gradle/src
 
-COPY src /app/src
+RUN gradle build --no-daemon
 
-RUN ./gradlew build
+# Stage 2: Start
+FROM eclipse-temurin:21-jdk-alpine
 
-# Stage 2: Create final image
-FROM openjdk:8-jre-slim
+RUN mkdir /app
 
-WORKDIR /app
+COPY --from=build /home/gradle/src/build/libs/instaBioBot.jar /app/
 
-COPY --from=builder /app/build/libs/instaBioBot.jar /app/instaBioBot.jar
+ENTRYPOINT ["java","-jar","/app/instaBioBot.jar"]
 
-RUN adduser --disabled-password --gecos '' --shell /usr/sbin/nologin user
+# RUN adduser --disabled-password --gecos '' --shell /usr/sbin/nologin user
 
-RUN chmod +x start.sh
+# RUN chmod +x start.sh
 
-RUN chown -R user:user /app
+# RUN chown -R user:user /app
 
-USER user
+# USER user
 
 # Start the application
-CMD ["bash", "./start.sh"]
+# CMD ["bash", "./start.sh"]
