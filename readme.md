@@ -44,7 +44,7 @@ Creation Date: 15/04/2024
 # Setup:
 
 ```cmd
-git clone(https://github.com/Jamal135/InstaBioBot)
+git clone https://github.com/Jamal135/InstaBioBot
 ```
 
 This application requires a `.env` file containing your Instagram login credentials to function. Create the `.env`
