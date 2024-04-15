@@ -16,6 +16,8 @@ services:
       SE_NODE_SESSION_TIMEOUT: 999999999
     networks:
       - web
+    ports:
+      - "4444:4444"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
       interval: 10s
@@ -39,6 +41,8 @@ services:
       - selenium
     networks:
       - web
+    volumes:
+      - ./config.yml:/config.yml
 
 networks:
   web:

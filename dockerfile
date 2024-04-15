@@ -7,22 +7,24 @@ WORKDIR /home/gradle/src
 
 RUN gradle build --no-daemon
 
-# Stage 2: Start
+# Stage 2: Setup
 FROM eclipse-temurin:21-jdk-alpine
+
+RUN apk add --no-cache bash curl
 
 RUN mkdir /app
 
 COPY --from=build /home/gradle/src/build/libs/instaBioBot.jar /app/
 
-ENTRYPOINT ["java","-jar","/app/instaBioBot.jar"]
+COPY start.sh /app/
 
-# RUN adduser --disabled-password --gecos '' --shell /usr/sbin/nologin user
+RUN adduser --disabled-password --gecos '' --shell /usr/sbin/nologin user
 
-# RUN chmod +x start.sh
+RUN chmod +x /app/start.sh
 
-# RUN chown -R user:user /app
+RUN chown -R user:user /app
 
-# USER user
+USER user
 
-# Start the application
-# CMD ["bash", "./start.sh"]
+# Stage 3: Start
+CMD ["bash", "/app/start.sh"]

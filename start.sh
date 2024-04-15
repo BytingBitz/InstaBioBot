@@ -3,13 +3,13 @@
 # Wait for Selenium
 for _ in {1..10}; do
   if curl -s "http://selenium:4444/wd/hub/status" | grep -q "ready"; then
-    echo "Selenium is ready!"
+    echo "[+] Selenium server is ready..."
     sleep 5
     # Run the jar
-    exec "java", "-jar", "instaBioBot.jar"
+    exec "java" "-jar" "/app/instaBioBot.jar"
   fi
-  echo "Waiting for Selenium..."
+  echo "[+] Waiting for Selenium server..."
   sleep 5
 done
-echo "Selenium is not ready, exiting..."
-exit 1
+echo "[+] Selenium server unavailable, exiting..."
+exit 0

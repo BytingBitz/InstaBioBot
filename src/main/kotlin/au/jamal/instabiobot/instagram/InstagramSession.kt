@@ -10,7 +10,7 @@ class InstagramSession(config: ConfigSettings) {
 
     private val session = BrowserManager(config.productionMode, config.debugMode, config.timeoutSeconds)
     private val sessionInterface = InstagramInterface(session)
-    private val credentials = CredentialManager()
+    private val credentials = CredentialManager(config.productionMode)
 
     fun login() {
         session.browser.get(INSTAGRAM_URL)
@@ -76,7 +76,7 @@ class InstagramSession(config: ConfigSettings) {
     private fun accessSettings() {
         if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
             session.browser.get(INSTAGRAM_SETTINGS_URL)
-            Delay.sleep(2..5)
+            Delay.sleep(5..10)
             if (session.browser.currentUrl != INSTAGRAM_SETTINGS_URL) {
                 Log.alert("Failed to access settings")
                 throw IllegalStateException("Session login issue...")

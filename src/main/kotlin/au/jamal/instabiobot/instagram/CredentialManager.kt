@@ -2,14 +2,22 @@ package au.jamal.instabiobot.instagram
 
 import io.github.cdimascio.dotenv.Dotenv
 
-class CredentialManager {
+class CredentialManager(production: Boolean) {
 
     private val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
-    val username = getSecret("USER")
-    val password = getSecret("PASS")
+    val username = getSecret("USER", production)
+    val password = getSecret("PASS", production)
 
-    private fun getSecret(variable: String): String {
-        return dotenv[variable] ?: System.getenv(variable) ?: throw IllegalStateException(".env variable [$variable] not present")
+    private fun getSecret(variable: String, production: Boolean): String {
+        return try {
+            if (production) {
+                System.getenv(variable) // Note: Docker env_file/dotenv use different parsers
+            } else {
+                (dotenv[variable]).trim('\'')
+            }
+        } catch (e: Exception) {
+            throw IllegalStateException("missing .env ['$variable']")
+        }
     }
 
 }
