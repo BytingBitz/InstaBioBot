@@ -44,7 +44,6 @@ Creation Date: 15/04/2024
 git clone https://github.com/Jamal135/InstaBioBot
 ```
 
-w
 This application requires a `.env` file containing your Instagram login credentials to function. Create the `.env`
 function in the root directory. Ensure values are enclosed in `'`s - this is required as a result of
 how `System.getenv()` loads docker environment variables. See
