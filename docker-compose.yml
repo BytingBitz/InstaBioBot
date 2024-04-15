@@ -16,8 +16,9 @@ services:
       SE_NODE_SESSION_TIMEOUT: 999999999
     networks:
       - web
-    ports:
-      - "4444:4444"
+#   Production view, uncomment port, set debugMode, go to http://localhost:4444/ui/#/sessions in Chrome
+#    ports:
+#      - "4444:4444"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
       interval: 10s
