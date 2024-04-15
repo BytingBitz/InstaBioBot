@@ -6,15 +6,16 @@
 
 > Note: It is your responsibility to read and understand the disclaimer.
 
-This Kotlin application is a rewrite of a [Python application](https://github.com/Jamal135/instagram-bot) I created
-over two years ago for automating your Instagram bio.
+This Kotlin application automates an Instagram acount bio, it is a rewrite
+of [Python instagram-bot](https://github.com/Jamal135/instagram-bot).
+
 
 The application creates a [Selenium](https://github.com/SeleniumHQ/docker-selenium) browser session,
 logs into Instagram, and navigates to account settings. From here the application calls `buildText` in `utilities.Bio`
 every ~2 seconds, updating your Instagram account bio when `buildText` returns a result different to your current bio.
 
-The application has been built to minimise requests to Instagram and will exit gracefully if it encounters consecutive
-errors.
+
+The application has been built to minimise requests, it will exit gracefully if it encounters consecutive errors.
 
 ```kt
 object Bio {
@@ -34,6 +35,7 @@ object Bio {
 ```
 
 This project represents my first time using Kotlin and all in all was a great experience - mostly.
+
 
 Creation Date: 15/04/2024
 
@@ -85,6 +87,7 @@ WARNING: Automating interactions on Instagram, including updates to your account
 terms of service and could result in the temporary or permanent suspension of your Instagram account. This is an
 application made for entertainment purposes, though you are using this application at your own risk.
 
+
 While efforts have been made to ensure this application is safe to use, the developer cannot guarantee using this
 application will not lead to potential repercussions.
 
@@ -101,5 +104,6 @@ of bio texts `utilities.Bio` can produce.
 # License:
 
 Copyright (c) [@Jamal135](https://github.com/Jamal135)
+
 
 MIT License
