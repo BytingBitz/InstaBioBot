@@ -1,4 +1,4 @@
-# Instagram Bio Automatic Updater
+# InstaBioBot
 
 ***
 
