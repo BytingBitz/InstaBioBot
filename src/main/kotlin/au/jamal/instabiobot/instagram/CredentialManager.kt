@@ -11,7 +11,7 @@ class CredentialManager(production: Boolean) {
     private fun getSecret(variable: String, production: Boolean): String {
         return try {
             if (production) {
-                System.getenv(variable) // Note: Docker env_file/dotenv use different parsers
+                System.getenv(variable) // Note: getenv/dotenv use different parsers
             } else {
                 (dotenv[variable]).trim('\'')
             }
