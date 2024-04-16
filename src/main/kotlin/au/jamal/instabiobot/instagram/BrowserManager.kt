@@ -1,5 +1,6 @@
 package au.jamal.instabiobot.instagram
 
+import au.jamal.instabiobot.control.SessionController
 import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
@@ -11,11 +12,12 @@ import java.time.Duration
 import java.util.logging.Level
 import kotlin.system.exitProcess
 
-class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
+class BrowserManager() {
 
-    private val options: ChromeOptions = configureOptions(debug)
-    val browser: WebDriver = startBrowser(options, production, timeout)
-    val wait = WebDriverWait(browser, Duration.ofSeconds(timeout))
+    private val options: ChromeOptions = configureOptions()
+    private val timeout: Duration = Duration.ofSeconds(SessionController.config.timeoutSeconds)
+    val browser: WebDriver = startBrowser(options)
+    val wait = WebDriverWait(browser, timeout)
 
     fun end() {
         Log.warn("Killing Selenium session...")
@@ -28,9 +30,9 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
         }
     }
 
-    private fun configureOptions(debug: Boolean): ChromeOptions {
+    private fun configureOptions(): ChromeOptions {
         val options = ChromeOptions()
-        if (!debug) {
+        if (SessionController.config.debugMode) {
             options.addArguments("--headless")
             options.addArguments("--disable-logging")
             options.setExperimentalOption("excludeSwitches", listOf("enable-automation"))
@@ -41,9 +43,9 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
         return options
     }
 
-    private fun startBrowser(options: ChromeOptions, production: Boolean, timeout: Long): WebDriver {
+    private fun startBrowser(options: ChromeOptions): WebDriver {
         val browser: WebDriver = try {
-            if (production) {
+            if (SessionController.config.productionMode) {
                 val remoteDriver = RemoteWebDriver(URI.create("http://selenium:4444/wd/hub").toURL(), options)
                 Log.status("Started production browser session")
                 remoteDriver
@@ -57,7 +59,7 @@ class BrowserManager(production: Boolean, debug: Boolean, timeout: Long) {
             Log.error(e)
             exitProcess(0)
         }
-        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeout))
+        browser.manage().timeouts().implicitlyWait(timeout)
         return browser
     }
 

@@ -1,16 +1,15 @@
 package au.jamal.instabiobot.instagram
 
-import au.jamal.instabiobot.control.ConfigSettings
 import au.jamal.instabiobot.utilities.Delay
 import au.jamal.instabiobot.utilities.Log
 import org.openqa.selenium.WebElement
 import java.time.LocalDateTime
 
-class InstagramSession(config: ConfigSettings) {
+class InstagramSession() {
 
-    private val session = BrowserManager(config.productionMode, config.debugMode, config.timeoutSeconds)
+    private val session = BrowserManager()
     private val sessionInterface = InstagramInterface(session)
-    private val credentials = CredentialManager(config.productionMode)
+    private val credentials = CredentialManager()
 
     fun login() {
         session.browser.get(INSTAGRAM_URL)

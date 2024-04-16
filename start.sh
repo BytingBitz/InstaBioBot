@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Wait for Selenium
-for _ in {1..10}; do
+for _ in {1..25}; do
   if curl -s "http://selenium:4444/wd/hub/status" | grep -q "ready"; then
     echo "[+] Selenium server is ready..."
     sleep 5

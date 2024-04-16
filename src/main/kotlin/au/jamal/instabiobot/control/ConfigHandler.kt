@@ -16,7 +16,6 @@ data class ConfigSettings(
 object ConfigHandler {
 
     private const val CONFIG_PATH = "config.yml"
-
     private val configFile = File(CONFIG_PATH)
     private val configClass = ConfigSettings::class.java
     private val yaml = Yaml()

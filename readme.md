@@ -6,8 +6,8 @@
 
 > Note: It is your responsibility to read and understand the disclaimer.
 
-This Kotlin application automates an Instagram acount bio, it is a rewrite
-of [Python instagram-bot](https://github.com/Jamal135/instagram-bot).
+This Kotlin application automates an Instagram account bio using Selenium as no API is available. It is a rewrite 
+and improvement of [Python instagram-bot](https://github.com/Jamal135/instagram-bot).
 
 The application creates a [Selenium](https://github.com/SeleniumHQ/docker-selenium) browser session,
 logs into Instagram, and navigates to account settings. From here the application calls `buildText` in `utilities.Bio`
@@ -46,7 +46,7 @@ git clone https://github.com/Jamal135/InstaBioBot
 
 This application requires a `.env` file containing your Instagram login credentials to function. Create the `.env`
 file in the root directory. Ensure values are enclosed in `'`s - this is required as a result of
-how `System.getenv()` loads docker environment variables. See
+how `docker-compose` parses env file variables to block unintended variable substitution. See
 relevant [issue](https://github.com/docker/compose/issues/8607).
 
 ```env
@@ -69,6 +69,8 @@ docker-compose down
 docker system prune -a
 docker ps
 ```
+
+Note: `config.yml` defaults to production `true` and debug `false`, modify this as required.
 
 ***
 

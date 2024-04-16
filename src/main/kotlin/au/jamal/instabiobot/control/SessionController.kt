@@ -10,9 +10,10 @@ import kotlin.system.exitProcess
 object SessionController {
 
     private var failCount: Int = 1
+    val config = ConfigHandler.loadSettings()
 
-    private fun bioUpdateHandler(session: InstagramSession, daysToRestart: Long) {
-        val restartDate = LocalDate.now().plusDays(daysToRestart)
+    private fun bioUpdateHandler(session: InstagramSession) {
+        val restartDate = LocalDate.now().plusDays(config.restartInDays)
         Log.info("Calculated restart date: $restartDate")
         var currentBio: String = session.getCurrentBio()
         while (LocalDate.now() < restartDate) {
@@ -27,12 +28,12 @@ object SessionController {
         Log.status("Restarting session...")
     }
 
-    fun mainSessionLoop(config: ConfigSettings) {
+    fun mainSessionLoop() {
         while (failCount <= config.failLimit) {
-            val session = InstagramSession(config)
+            val session = InstagramSession()
             try {
                 session.login()
-                bioUpdateHandler(session, config.restartInDays)
+                bioUpdateHandler(session)
             } catch (e: Exception) {
                 Log.error(e)
                 Log.alert("Session failed: $failCount/${config.failLimit}")
