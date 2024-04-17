@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 
 object SessionController {
 
-    private var failCount: Int = 1
+    private var failCount: Int = 0
     val config = ConfigHandler.loadSettings()
 
     private fun bioUpdateHandler(session: InstagramSession) {
@@ -23,22 +23,22 @@ object SessionController {
                 currentBio = generatedBio
             }
             Delay.sleep(1..2)
-            failCount = 1
+            failCount = 0
         }
         Log.status("Restarting session...")
     }
 
     fun mainSessionLoop() {
-        while (failCount <= config.failLimit) {
+        while (failCount < config.failLimit) {
             val session = InstagramSession()
             try {
                 session.login()
                 bioUpdateHandler(session)
             } catch (e: Exception) {
                 Log.error(e)
+                failCount += 1
                 Log.alert("Session failed: $failCount/${config.failLimit}")
                 Delay.sleep(60..120)
-                failCount += 1
             } finally {
                 session.end()
             }
