@@ -32,7 +32,7 @@ class BrowserManager() {
 
     private fun configureOptions(): ChromeOptions {
         val options = ChromeOptions()
-        if (SessionController.config.debugMode) {
+        if (!SessionController.config.debugMode) {
             options.addArguments("--headless")
             options.addArguments("--disable-logging")
             options.setExperimentalOption("excludeSwitches", listOf("enable-automation"))
