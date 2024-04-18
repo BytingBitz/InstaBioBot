@@ -19,7 +19,7 @@ object Log {
     }
 
     fun error(error: Throwable) {
-        println("[${colour("e", 31)}]")
+        println("[${colour("e", 31)}]".trimStart())
         fun printErrors(error: Throwable?) {
             if (error == null) return
             println(colour("(${error::class.simpleName}) ${error.message}", 31))
@@ -40,7 +40,7 @@ object Log {
 
     private fun trace(error: Throwable) {
         val trace = error.stackTrace.joinToString("\n")
-        println("[${colour("t", 31)}]\n${colour(trace, 31)}")
+        println("[${colour("t", 31)}]\n${colour(trace, 31)}".trimStart())
     }
 
 }
