@@ -32,12 +32,12 @@ class InstagramInterface(session: BrowserManager) {
 
     fun getBioTextAttribute(): String {
         val bioElement = getBioElement()
-        return getAttribute(bioElement, "value")
+        return getValue(bioElement)
     }
 
-    fun getUpdateAriaAttribute(): String {
-        val updateElement = getUpdateElement()
-        return getAttribute(updateElement, "aria-disabled")
+    fun getUpdateButtonStatus(): Boolean {
+        val updateElement = getUpdateElement() // If span means submit button non-interactable
+        return updateElement.tagName.equals("span", ignoreCase = true)
     }
 
     private fun getElement(selector: (String) -> By, expression: String): WebElement {
@@ -52,11 +52,11 @@ class InstagramInterface(session: BrowserManager) {
         }
     }
 
-    private fun getAttribute(element: WebElement, attribute: String): String {
+    private fun getValue(element: WebElement): String {
         try {
-            return element.getAttribute(attribute) ?: throw IllegalStateException("Null attribute")
+            return element.getAttribute("value") ?: throw IllegalStateException("Null attribute")
         } catch (e: Exception) {
-            Log.alert("Failed to access attribute [$attribute]")
+            Log.alert("Failed to access attribute [value]")
             Log.dump(element)
             throw IllegalStateException("Failed to get attribute...", e)
         }

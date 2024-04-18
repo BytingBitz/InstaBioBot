@@ -39,8 +39,8 @@ class InstagramSession() {
         val updateButton = sessionInterface.getUpdateElement()
         clickButton(updateButton)
         Delay.sleep(5..10)
-        val updateButtonDisabled = sessionInterface.getUpdateAriaAttribute()
-        if (updateButtonDisabled != "true") {
+        val updateButtonDisabled = sessionInterface.getUpdateButtonStatus()
+        if (!updateButtonDisabled) {
             Log.alert("Bio update to [$newBioText] failed at ${LocalDateTime.now()}")
             throw IllegalStateException("Instagram bio update failed...")
         }
