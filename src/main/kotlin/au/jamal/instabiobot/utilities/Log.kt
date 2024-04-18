@@ -37,13 +37,13 @@ object Log {
         printLog("[${colour("d", 37)}] ${colour(content, 37)}")
     }
 
-    private fun colour(text: String, colourCode: Int): String {
-        return "\u001B[${colourCode}m$text\u001B[0m"
-    }
-
     private fun trace(error: Throwable) {
         val trace = error.stackTrace.joinToString("\n\t")
         printLog("[${colour("t", 31)}] ${colour(trace, 31)}")
+    }
+
+    private fun colour(text: String, colourCode: Int): String {
+        return "\u001B[${colourCode}m$text\u001B[0m"
     }
 
     private fun printLog(text: String) {

@@ -32,9 +32,8 @@ object SessionController {
         while (failCount < config.failLimit) {
             val session = InstagramSession()
             try {
-                throw IllegalStateException()
-//                session.login()
-//                bioUpdateHandler(session)
+                session.login()
+                bioUpdateHandler(session)
             } catch (e: Exception) {
                 Log.error(e)
                 failCount += 1
